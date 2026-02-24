@@ -1,11 +1,16 @@
-import { Route, Routes } from "react-router"
+import { Route, Routes,Navigate } from "react-router"
 import ChatPage from "./pages/ChatPage"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import { useAuthStore } from "./store/useAuthStore";
+import { useEffect } from "react";
 
 const App = () => {
-  const {isLogin, login} = useAuthStore();
+  const { checkAuth, isCheckingAuth ,authUser} = useAuthStore();
+  useEffect(() => {
+    checkAuth();
+  }, []); 
+  console.log(authUser);
   return (
     
     <div className="min-h-screen bg-slate-900 relative flex items-center justify-center p-4 overflow-hidden">
@@ -19,9 +24,9 @@ const App = () => {
 
       <div className="relative z-10 w-full max-w-7xl">
         <Routes>
-          <Route path="/" element={<ChatPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/" element={authUser ? <ChatPage /> : <Navigate to="/login" />} />
+          <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/" />} />
+          <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/" />} />
         </Routes>
       </div>
     </div>
