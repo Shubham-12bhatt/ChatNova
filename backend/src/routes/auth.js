@@ -8,7 +8,7 @@ const arcjetMiddleware = require("../middleware/arcjetMiddleware");
 
 authRouter.use(arcjetMiddleware);
 
-authRouter.post("/register",register);
+authRouter.post("/signup",register);
 authRouter.post("/login",login);
 authRouter.post("/logout", logout); 
 

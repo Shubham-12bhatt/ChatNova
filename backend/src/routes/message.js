@@ -1,5 +1,7 @@
 const express = require("express");
 const { getAllContacts, getChatPartners, getMessages, sendMessage } = require("../controllers/messageC");
+const arcjetMiddleware = require("../middleware/arcjetMiddleware");
+const { protectRoute } = require("../middleware/validation");
 const messageRouter = express.Router();
 
 messageRouter.use(arcjetMiddleware,protectRoute);
