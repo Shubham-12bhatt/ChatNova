@@ -5,11 +5,11 @@ const authRouter = require("./routes/auth");
 const messageRouter = require("./routes/message");
 const connectDB = require("./lib/db");
 const cors = require("cors");
-
+const cookieParser = require("cookie-parser");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-
+app.use(cookieParser());
 app.use(cors({origin: process.env.CLIENT_URL, credentials: true}));
 app.use(express.json({limit: "5mb"})); 
 app.use(express.urlencoded({limit: "5mb", extended: true}));
