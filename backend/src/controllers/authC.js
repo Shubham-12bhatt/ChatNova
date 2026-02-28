@@ -119,7 +119,7 @@ exports.updateProfile = async(req,res)=>{
     const updatedUser = await User.findByIdAndUpdate(userId,{
       profilePic: uploadResult.secure_url
     },{
-      new: true
+      returnDocument: "after"
     });
     return res.status(200).json(updatedUser);
   } catch (error) {
