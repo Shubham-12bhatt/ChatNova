@@ -3,6 +3,7 @@ import ChatContainer from "../components/ChatContainer";
 import ChatsList from "../components/ChatsList";
 import ContactsList from "../components/ContactsList";
 import NoConversation from "../components/NoConversation";
+import NoConversationPlaceholder from "../components/NoConversationPlaceholder";
 import ProfileHeader from "../components/ProfileHeader";
 import { useChatStore } from "../store/useChatStore";
 
@@ -37,7 +38,7 @@ const ChatPage = () => {
 
           {/* Right side */}
           <div className={`flex-1 flex-col bg-slate-900/50 backdrop-blur-sm relative z-10 ${!selectedUser ? "hidden md:flex" : "flex"}`}>
-            {selectedUser ? <ChatContainer /> : <NoConversation />}
+            {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
           </div>
           
         </div>
