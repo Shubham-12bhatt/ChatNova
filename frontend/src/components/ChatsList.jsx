@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import UsersLoadingSkel from "./UsersLoadingSkel";
 import NoChatsFound from "./NoChatsFound";
 const ChatsList = () => {
-  const { getMyChatPartners, chats, isUsersLoading, setSelectedUser } = useChatStore();
+  const { getMyChatPartners, chats, isUsersLoading, setSelectedUser, selectedUser } = useChatStore();
   useEffect(() => {
     getMyChatPartners();
   }, [getMyChatPartners]);
@@ -15,7 +15,11 @@ const ChatsList = () => {
       {chats.map(chat => (
         <div key={chat._id}
         onClick={() => setSelectedUser(chat)}
-        className="flex items-center space-x-3 bg-slate-800/30 p-4 rounded-lg hover:bg-slate-800/50 cursor-pointer transition-colors w-full"
+        className={`flex items-center space-x-3 p-4 rounded-lg cursor-pointer transition-all w-full ${
+          selectedUser?._id === chat._id
+            ? "bg-slate-700/80 ring-1 ring-cyan-500"
+            : "bg-slate-800/30 hover:bg-slate-800/50"
+        }`}
         >
           <div className="relative shrink-0">
             <img src={chat.profilePic || "/avatar.png"} alt={chat.fullName} className="w-12 h-12 rounded-full object-cover" />
