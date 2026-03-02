@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import ChatHeader from "./ChatHeader";
@@ -9,7 +9,13 @@ import MessageInput from "./MessageInput";
 const ChatContainer = () => {
   const { selectedUser, getMessagesByUserId, messages, isMessagesLoading } = useChatStore();
   const { authUser } = useAuthStore();
+  const messageContainerRef = useRef(null);
 
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
   useEffect(() => {
     if (selectedUser) {
       getMessagesByUserId(selectedUser._id);
@@ -30,7 +36,7 @@ const ChatContainer = () => {
     <div className="flex-1 flex flex-col w-full h-full bg-slate-900/50">
       <ChatHeader />
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+      <div ref={messageContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 scroll-smooth">
         {messages.length > 0 ? (
           <div>
             {messages.map((message) => (
@@ -63,11 +69,14 @@ const ChatContainer = () => {
                   </span>
                 </div>
               </div>
+              
             ))}
+           
           </div>
         ) : (
           <NoChatHistoryPlaceholder name={selectedUser.fullName} />
         )}
+        
       </div>
 
       <MessageInput />

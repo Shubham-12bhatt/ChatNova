@@ -77,7 +77,7 @@ exports.getChatPartners = async(req,res)=>{
             ]
         }).sort({ createdAt: -1 });
       const chatPartnerIds = messages.map(message => {
-        return message.senderId.toString() === loggedInUserId ? message.receiverId.toString() : message.senderId.toString();
+        return message.senderId.toString() === loggedInUserId.toString() ? message.receiverId.toString() : message.senderId.toString();
       });
       const uniqueChatPartnerIds = [...new Set(chatPartnerIds)];
  

@@ -2,7 +2,7 @@ import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";
 import UsersLoadingSkel from "./UsersLoadingSkel";
 const ContactsList = () => {
-  const { getAllContacts, allContacts, setSelectedUser,isUsersLoading } = useChatStore();
+  const { getAllContacts, allContacts, setSelectedUser, isUsersLoading, selectedUser } = useChatStore();
   useEffect(() => {
     getAllContacts();
   }, [getAllContacts]);
@@ -12,7 +12,11 @@ const ContactsList = () => {
       {allContacts.map(contact => (
         <div key={contact._id}
         onClick={() => setSelectedUser(contact)}
-        className="flex items-center space-x-3 bg-slate-800/30 p-4 rounded-lg hover:bg-slate-800/90 cursor-pointer transition-colors w-full"
+        className={`flex items-center space-x-3 p-4 rounded-lg cursor-pointer transition-all w-full ${
+          selectedUser?._id === contact._id
+            ? "bg-slate-700/80 ring-1 ring-cyan-500"
+            : "bg-slate-800/30 hover:bg-slate-800/90"
+        }`}
         >
           <div className="relative shrink-0">
             <img src={contact.profilePic || "/avatar.png"} alt={contact.fullName} className="w-12 h-12 rounded-full object-cover" />
