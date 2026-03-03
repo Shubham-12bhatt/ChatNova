@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-export const socketAuthMiddleware = async (socket, next) => {
+exports.socketAuthMiddleware = async (socket, next) => {
   try {
     const token = socket.handshake.headers.cookie?.split("; ").find(row => row.startsWith("jwt="))?.split("=")[1];
     if (!token) {
