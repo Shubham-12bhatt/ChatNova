@@ -1,10 +1,11 @@
 import { XIcon } from "lucide-react";
 import { useChatStore } from "../store/useChatStore";
 import { useEffect } from "react";
-
+import { useAuthStore } from "../store/useAuthStore";
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
-  
+  const { onlineUsers } = useAuthStore();
+  const isOnline = onlineUsers.includes(selectedUser._id);
   useEffect(() => {
     const handleEscKey = (e) => {
       if (e.key === "Escape") {
@@ -26,13 +27,14 @@ const ChatHeader = () => {
               className="w-full h-full object-cover"
             />
           </div>
+          {isOnline ? <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-900"></span> : <span className="absolute bottom-0 right-0 w-3 h-3 bg-gray-500 rounded-full border-2 border-slate-900"></span>}
         </div>
         <div className="flex flex-col">
           <h3 className="font-semibold text-slate-100 text-sm sm:text-base">
             {selectedUser.fullName}
           </h3>
           <p className="text-cyan-400 text-xs sm:text-sm font-medium">
-            Online
+            {isOnline ? "Online" : "Offline"}
           </p>
         </div>
       </div>
