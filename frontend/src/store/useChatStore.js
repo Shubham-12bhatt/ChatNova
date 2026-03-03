@@ -78,12 +78,40 @@ export const useChatStore = create((set, get) => ({
     try {
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, msgData);
       set({ messages: [...messages, res.data] })
+
+      // Move the active chat partner to the top of the chat list
+      const currentChats = get().chats;
+      const filteredChats = currentChats.filter(chat => chat._id !== selectedUser._id);
+      set({ chats: [selectedUser, ...filteredChats] });
     }
     catch (error) {
       set({ messages: messages })
       toast.error(error.response?.data?.message || error.message)
     }
 
+  },
+  subscribeToMessage: () => {
+    const { selectedUser, isSoundEnabled } = get();
+    if (!selectedUser) return;
+    const socket = useAuthStore.getState().socket;
+    socket.on("newMessage", (message) => {
+      if (message.senderId === selectedUser?._id) {
+        set({ messages: [...get().messages, message] })
+      }
+
+      // latest message arrives
+      get().getMyChatPartners();
+
+      if (isSoundEnabled) {
+        const notificationSound = new Audio("/sounds/notification.mp3");
+        notificationSound.currentTime = 0;
+        notificationSound.play().catch((err) => console.log("Error playing sound", err));
+      }
+    })
+  },
+  unsubscribeToMessage: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("newMessage");
   }
 
 }))

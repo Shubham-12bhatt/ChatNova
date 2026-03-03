@@ -1,7 +1,7 @@
-import { Server } from "socket.io";
-import http from "http";
-import express from "express";
-import { socketAuthMiddleware } from "../middleware/socketAuthMiddleware.js";
+const { Server } = require("socket.io");
+const http = require("http");
+const express = require("express");
+const { socketAuthMiddleware } = require("../middleware/socketAuthMiddleware.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -14,7 +14,14 @@ const io = new Server(server, {
 });
 
 io.use(socketAuthMiddleware);
-export default io;
+
+
+function getReceiverSocketId(userId){
+  return userSocketMap[userId];
+} 
+
+
+
 //storing online user
 const userSocketMap = {};
 io.on("connection", (socket) => {
@@ -28,4 +35,4 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   })
 })
-export { io, server, app }
+module.exports = { io, server, app, getReceiverSocketId }

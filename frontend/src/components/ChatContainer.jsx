@@ -7,21 +7,29 @@ import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 import MessageInput from "./MessageInput";
 
 const ChatContainer = () => {
-  const { selectedUser, getMessagesByUserId, messages, isMessagesLoading } = useChatStore();
+  const { selectedUser, getMessagesByUserId, messages, isMessagesLoading,subscribeToMessage,unsubscribeToMessage } = useChatStore();
   const { authUser } = useAuthStore();
   const messageContainerRef = useRef(null);
+  
+    useEffect(() => {
+      if (selectedUser) {
+        getMessagesByUserId(selectedUser._id);
+        subscribeToMessage();
+      }
+      return () => {
+        unsubscribeToMessage();
+      }
+    }, [selectedUser, getMessagesByUserId,subscribeToMessage,unsubscribeToMessage]);
 
   useEffect(() => {
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }
   }, [messages]);
-  useEffect(() => {
-    if (selectedUser) {
-      getMessagesByUserId(selectedUser._id);
-    }
-  }, [selectedUser, getMessagesByUserId]);
 
+
+
+  
   if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col w-full h-full bg-slate-900/50">
