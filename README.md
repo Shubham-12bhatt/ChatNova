@@ -47,8 +47,3 @@ This application allows users to authenticate, send text and image messages, see
 
 ---
 
-
-
-## ⭐ Support
-
-If you like this project, consider giving it a star ⭐ on GitHub.
