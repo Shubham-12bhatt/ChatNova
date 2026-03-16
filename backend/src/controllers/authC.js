@@ -35,7 +35,7 @@ exports.register = async (req, res) => {
         await sendWelcomeEmail(newUser.email, newUser.fullName, process.env.CLIENT_URL);
       } catch (error) {
         console.error("Error sending welcome email:", error);
-      } 
+      }
 
       return res.status(201).json(
         {
@@ -58,7 +58,7 @@ exports.register = async (req, res) => {
 
 
 exports.login = async (req, res) => {
-  const {email,password} = req.body;
+  const { email, password } = req.body;
   try {
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -92,8 +92,8 @@ exports.logout = async (req, res) => {
     res.cookie("jwt", "", {
       maxAge: 0,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "development" ? false : true,
-      sameSite: "strict",
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: process.env.NODE_ENV !== "development" ? "none" : "strict",
     });
     return res.status(200).json({ message: "Logout successful" });
   }
@@ -103,22 +103,22 @@ exports.logout = async (req, res) => {
 }
 
 
-exports.updateProfile = async(req,res)=>{
+exports.updateProfile = async (req, res) => {
   try {
     const { profilePic } = req.body;
-    if(!profilePic){
+    if (!profilePic) {
       return res.status(400).json({ message: "Profile picture is required" });
     }
     const userId = req.user._id;
 
-    const uploadResult = await cloudinary.uploader.upload(profilePic,{
+    const uploadResult = await cloudinary.uploader.upload(profilePic, {
       folder: "chatNova/profilePics",
       resource_type: "image",
     });
-   
-    const updatedUser = await User.findByIdAndUpdate(userId,{
+
+    const updatedUser = await User.findByIdAndUpdate(userId, {
       profilePic: uploadResult.secure_url
-    },{
+    }, {
       returnDocument: "after"
     });
     return res.status(200).json(updatedUser);
