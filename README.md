@@ -45,5 +45,6 @@ This application allows users to authenticate, send text and image messages, see
 - Live message broadcasting
 - Proper subscribe/unsubscribe handling to prevent memory leaks
 
+---
 
 
